@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Dark fantasy palette - Deep purples, voids, and magic glows */
+  --background: 260 30% 8%;    /* #100b17 */
+  --foreground: 260 10% 95%;   /* #f0f0f5 */
+  
+  --card: 260 25% 12%;         /* #1a1523 */
+  --card-foreground: 260 10% 95%;
+
+  --popover: 260 25% 12%;
+  --popover-foreground: 260 10% 95%;
+
+  --primary: 265 80% 65%;      /* #a855f7 - Magic Purple */
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 260 20% 20%;    /* #2a2533 */
+  --secondary-foreground: 260 10% 90%;
+
+  --muted: 260 20% 18%;
+  --muted-foreground: 260 10% 60%;
+
+  --accent: 35 90% 60%;        /* #f59e0b - Gold/Mythic accent */
+  --accent-foreground: 260 30% 10%;
+
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 260 20% 20%;
+  --input: 260 20% 20%;
+  --ring: 265 80% 65%;
+
+  --radius: 0.5rem;
+  
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased font-body;
+    background-image: 
+      radial-gradient(circle at 50% 0%, hsl(265 80% 65% / 0.1), transparent 40%),
+      radial-gradient(circle at 0% 50%, hsl(260 50% 30% / 0.05), transparent 30%),
+      radial-gradient(circle at 100% 50%, hsl(35 90% 60% / 0.05), transparent 30%);
+    background-attachment: fixed;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight text-foreground;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--secondary));
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.5);
+}
+
+/* 3D Card Flip Utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
