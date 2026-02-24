@@ -1,5 +1,5 @@
 # MTG Pack Simulator
-
+//This is a vibe coded app using paid tool, so i you want to help me with the cost of it, please support me on Ko-Fi [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O5O71UV4QU) //
 A web-based Magic: The Gathering booster pack simulator. Administrators sync card sets from the Scryfall API, manage players via invitation codes, and grant booster packs. Players open packs with animated card reveals (3D flip animations, confetti effects for rare pulls), build collections, and export to Moxfield-compatible formats.
 
 Built with a dark fantasy aesthetic inspired by MTG's visual identity.
