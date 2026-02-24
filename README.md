@@ -5,8 +5,6 @@
 
 A web-based Magic: The Gathering booster pack simulator. Administrators sync card sets from the Scryfall API, manage players via invitation codes, and grant booster packs. Players open packs with animated card reveals (3D flip animations, confetti effects for rare pulls), build collections, and export to Moxfield-compatible formats.
 
-Built with a dark fantasy aesthetic inspired by MTG's visual identity.
-
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 ---
