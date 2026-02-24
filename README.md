@@ -291,7 +291,6 @@ Admins have access to all management modules through the navigation sidebar.
 - **Plain Text Export** — Export your collection as a text list (e.g., `1 Lightning Bolt (2X2) 224`)
 - **Moxfield CSV Export** — Export in Moxfield-compatible CSV format for direct import into Moxfield decks/collections
 - **Export by Tag** — Export only cards from a specific event/tag in either format
-- **Language Preference** — Set your preferred language in settings
 
 ---
 
@@ -442,7 +441,6 @@ This pulls the rare/mythic slot specifically from the Kamigawa: Neon Dynasty (`n
 | GET | `/api/player/collection/export/csv` | Export as Moxfield CSV |
 | GET | `/api/player/collection/export/tag/:tag` | Export by tag (text) |
 | GET | `/api/player/collection/export/csv/tag/:tag` | Export by tag (CSV) |
-| PATCH | `/api/player/preferences/language` | Update language preference |
 
 ---
 
