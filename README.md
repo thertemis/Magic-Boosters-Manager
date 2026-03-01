@@ -1,4 +1,4 @@
-# MTG Pack Simulator
+# Magic Boosters Manager
 
 //This is a vibe coded app using paid tool, so if you want to help me with the cost of it, please support me on Ko-Fi//
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O5O71UV4QU)
