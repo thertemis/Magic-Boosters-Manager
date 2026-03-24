@@ -8,7 +8,7 @@ A self-hosted web application for simulating Magic: The Gathering booster pack o
 ![Docker](https://img.shields.io/badge/docker-compose-blue)
 
 > **Card data** is provided by [Scryfall](https://scryfall.com) via their free public API. Magic: The Gathering and all card names/artwork are property of [Wizards of the Coast](https://magic.wizards.com). This project is not affiliated with or endorsed by Wizards of the Coast.
-
+![[screenshot1.png]]
 ---
 
 ## Table of Contents
@@ -35,7 +35,7 @@ A self-hosted web application for simulating Magic: The Gathering booster pack o
 | *(3D card flip with confetti)* | *(filterable card grid with prices)* | *(set sync, grants, economy)* |
 
 ---
-
+![[screenshot2.png]]
 ## Features
 
 ### Pack Opening Experience
