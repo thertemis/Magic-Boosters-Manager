@@ -1,0 +1,44 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "sOL3Ds12fUd_Wbi9vAddP"
+uri = "file://upgrade-archive/DOCKER_UPGRADE_GUIDE.md"
+type = "text"
+title = "Docker Upgrade Guide — Zero Data Loss"
+
+[[outputs]]
+id = "8UKmv05-FcJVnFWT2eNMM"
+uri = "file://upgrade-archive/GITHUB_GUIDE.md"
+type = "text"
+title = "GitHub Update Guide"
+
+[[outputs]]
+id = "6jf-uF4c2oAQZPsVergI2"
+uri = "file://upgrade-archive/CHANGELOG.md"
+type = "text"
+title = "Changelog v2.0"
+
+[[outputs]]
+id = "Oyc_sR_xWPoBOy9WlLtC3"
+uri = "file://upgrade-archive/README.md"
+type = "text"
+title = "README for GitHub"
+
+[[outputs]]
+id = "qe8lAC7UYeRXrzDuQTIl5"
+uri = "file://mtg-pack-simulator.tar.gz"
+type = "unspecified"
+title = "MTG Pack Simulator — Updated Archive (fixed upgrade guide)"
+
+[[outputs]]
+id = "Z_8VDphYbxQGapnEh3zbp"
+uri = "file://mtg-booster-simulator.tar.gz"
+type = "unspecified"
+title = "MTG Booster Simulator — Clean Archive"
+
+[[outputs]]
+id = "cNwEFnXlLwZaWfBU8Ch2v"
+uri = "file://mtg-pack-simulator-20260324.tar.gz"
+type = "unspecified"
+title = "MTG Pack Simulator — GitHub/Docker Archive (2026-03-24)"

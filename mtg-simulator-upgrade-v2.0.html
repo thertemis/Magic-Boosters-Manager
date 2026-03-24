@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<title>MTG Simulator — Upgrade Package v2.0</title>
+<style>
+  body { font-family: monospace; max-width: 900px; margin: 40px auto; padding: 20px; background: #1a1a2e; color: #eee; }
+  h1 { color: #a855f7; border-bottom: 2px solid #a855f7; padding-bottom: 10px; }
+  h2 { color: #c084fc; margin-top: 40px; border-bottom: 1px solid #333; padding-bottom: 8px; }
+  h3 { color: #ddd; }
+  pre, code { background: #0f172a; border: 1px solid #333; border-radius: 6px; padding: 2px 6px; color: #a3e635; font-size: 13px; }
+  pre { padding: 16px; overflow-x: auto; white-space: pre-wrap; }
+  pre code { background: none; border: none; padding: 0; }
+  .file-section { border: 1px solid #333; border-radius: 8px; margin: 30px 0; padding: 20px; background: #16213e; }
+  .file-title { font-size: 1.2em; font-weight: bold; color: #a855f7; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #333; padding: 8px 12px; text-align: left; }
+  th { background: #0f172a; color: #c084fc; }
+  ul, ol { padding-left: 24px; }
+  li { margin: 4px 0; }
+  a { color: #818cf8; }
+  strong { color: #f9fafb; }
+</style>
+</head>
+<body>
+<h1>MTG Pack Simulator — Upgrade Package v2.0</h1>
+<p>This package contains documentation to safely upgrade your MTG Pack Simulator instance to v2.0.</p>
+<p><strong>Contents:</strong> README &bull; CHANGELOG &bull; Docker Upgrade Guide &bull; GitHub Guide</p>
+<hr style='border-color:#333'>
+<div class="file-section"><div class="file-title">README.md</div><h1>MTG Pack Simulator</h1></p><p>A Magic: The Gathering booster pack simulator with economy, marketplace, scheduled grants, custom booster DSL, Scryfall syntax support, decklist checking, a full REST API, and EN/FR language support.</p><p><h2>Features</h2></p><p><li><strong>Booster Pack Opening</strong> — Animated 3D card reveals with confetti for rares. Supports classic 15-card, modern 14-card play booster, and collector booster formats (auto-detected by set release date)</li>
+<li><strong>Card Pool Editor</strong> — Enable/disable individual cards from packs; filter with full Scryfall syntax; image modal on click</li>
+<li><strong>Custom Booster DSL</strong> — Define custom pack compositions with rarity/Scryfall filters and probability slots</li>
+<li><strong>Economy &amp; Marketplace</strong> — Currency system, pack store, user-to-user card trading, sell-to-store at Scryfall prices</li>
+<li><strong>Automatic Schedules</strong> — Auto-grant boosters to players daily at a configured UTC hour</li>
+<li><strong>Decklist Check</strong> — Paste any MTG decklist and see which cards you own vs. which are missing</li>
+<li><strong>REST API</strong> — Full API v1 with API key authentication for external integrations</li>
+<li><strong>Language Support</strong> — English and French UI (selectable per user)</li>
+<li><strong>Backup &amp; Restore</strong> — Full JSON export/import of all data</li></p><p><h2>Stack</h2></p><p><li><strong>Frontend</strong>: React 18 + TypeScript, Vite, Wouter, TanStack Query, Shadcn/ui, Framer Motion, Tailwind CSS</li>
+<li><strong>Backend</strong>: Express.js + TypeScript (tsx dev, esbuild prod)</li>
+<li><strong>Database</strong>: PostgreSQL via Drizzle ORM</li>
+<li><strong>Auth</strong>: Passport.js (local strategy) + express-session</li></p><p><h2>Quick Start (Docker)</h2></p><p><pre><code>docker run -d \
+  --name mtg-simulator \
+  -e DATABASE_URL=postgresql://user:pass@host:5432/mtgsim \
+  -e SESSION_SECRET=some-random-secret \
+  -p 5000:5000 \
+  mtg-simulator:latest
+</code></pre></p><p><h3>docker-compose.yml</h3></p><p><pre><code>version: "3.8"
+services:
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgresql://mtg:changeme@db:5432/mtgsim
+      SESSION_SECRET: change-me-to-random-string
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    restart: unless-stopped</p><p>  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: mtg
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: mtgsim
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped</p><p>volumes:
+  pgdata:
+</code></pre></p><p><h2>Default Credentials</h2></p><p>On first startup, an <code>admin</code> user is created with password <code>admin</code>. <strong>Change this immediately</strong> via Admin → Users.</p><p><h2>Environment Variables</h2></p><p><tr><td> Variable | Required | Description </td></tr>
+<tr><td>---|---|---</td></tr>
+<tr><td> <code>DATABASE_URL</code> | Yes | PostgreSQL connection string </td></tr>
+<tr><td> <code>SESSION_SECRET</code> | Yes | Random string for session signing </td></tr>
+<tr><td> <code>NODE_ENV</code> | No | Set to <code>production</code> for prod build </td></tr></p><p><h2>API</h2></p><p>Generate API keys from <strong>Admin → API Keys</strong>. Then use:</p><p><pre><code>GET  /api/v1/users
+GET  /api/v1/users/:id/collection
+POST /api/v1/users/:id/decklist-check
+GET  /api/v1/users/:id/packs
+GET  /api/v1/users/:id/balance
+GET  /api/v1/sets
+GET  /api/v1/sets/:code/cards
+GET  /api/v1/economy
+</code></pre></p><p>All API v1 endpoints require <code>X-Api-Key: mtg_...</code> header (or <code>?api_key=</code> query param).</p><p>Full docs available in-app at <code>/api-docs</code>.</p><p><h2>Development</h2></p><p><pre><code>npm install
+npm run db:push   # Sync DB schema
+npm run dev       # Start dev server (port 5000)
+</code></pre></p><p><h2>License</h2></p><p>MIT
+</div><div class="file-section"><div class="file-title">CHANGELOG.md</div><h1>MTG Pack Simulator — Changelog</h1></p><p><h2>v2.0.0 — Major Feature Release</h2></p><p><h3>Economy &amp; Marketplace System</h3>
+<li><strong>Economy master switch</strong> — Admin can enable/disable the entire economy system from Admin → Economy</li>
+<li><strong>Customizable currency</strong> — Name and symbol configurable (default: Gold / G)</li>
+<li><strong>Pack Store</strong> — Admin creates pack listings with prices and optional stock limits; players browse and purchase packs with currency</li>
+<li><strong>User-to-user card trading</strong> — Players list cards for sale at custom prices; other players buy them from the Card Market tab</li>
+<li><strong>Sell to Store</strong> — Players sell cards from their collection at a rate based on Scryfall USD price × a configurable multiplier (default: $1 USD = 100 Gold)</li>
+<li><strong>Daily currency claim</strong> — Players can claim a configurable daily currency reward from the Marketplace page</li>
+<li><strong>Currency grants</strong> — Admins can grant any amount of currency to any player from Admin → Economy</li>
+<li><strong>Transaction log</strong> — Full history of all currency movements, visible to admins</li>
+<li><strong>Economy toggle per feature</strong> — Marketplace, pack store, user trading, card selling and daily claim can each be toggled independently</li></p><p><h3>Scryfall Syntax Integration</h3>
+<li><strong>Card Pool Editor</strong> — Advanced Scryfall syntax filter (e.g. <code>t:legendary c:rw o:lifelink is:fullart</code>)</li>
+<li><strong>Shared filter utility</strong> (<code>shared/scryfall-filter.ts</code>) — Client-safe parser imported by both frontend and backend</li>
+<li>Supports: <code>c:</code>, <code>id:</code>, <code>t:</code>, <code>o:</code>, <code>r:</code>, <code>cmc:</code>, <code>pow:</code>, <code>tou:</code>, <code>is:</code>, <code>s:</code>, <code>border:</code>, <code>frame:</code>, <code>keyword:</code>, <code>name:</code>, <code>artist:</code>, <code>set:</code></li>
+<li>Full boolean logic: AND (implicit/explicit), OR, NOT, <code>-</code> prefix, parentheses grouping</li>
+<li>Card pool editor: <strong>Enable All / Disable All</strong> buttons apply to current filtered view</li>
+<li>Card pool editor: <strong>Image modal</strong> — click any card thumbnail to see large image with Scryfall link</li></p><p><h3>Automatic Booster Schedules</h3>
+<li>Admin creates scheduled daily booster grants from Admin → Schedules</li>
+<li>Configurable: set, pack type, quantity, recipient (all players or specific player), UTC hour</li>
+<li>Background scheduler runs every 60 seconds and grants packs once per configured UTC hour per day</li></p><p><h3>New Custom Booster DSL</h3>
+<li>Extended syntax: <code>{N([scryfall_query]:pct,...);M([query]:pct,...)}</code> — defines slot groups with Scryfall filters</li>
+<li><code>set:all</code> uses cards from all imported sets; <code>set:ltc</code> overrides with a specific set</li>
+<li>Legacy syntax <code>{r,75,m,25;u,100;c,100}</code> still fully supported — no existing templates broken</li></p><p><h3>Decklist Check</h3>
+<li>New page: <strong>Decklist Check</strong> — paste any decklist (standard MTG format), instantly see which cards you own (green) vs missing (red)</li>
+<li>Matching is by card name only — ignores set, variant, collector number</li>
+<li>Supported input formats: <code>4 Lightning Bolt</code>, <code>Lightning Bolt</code>, <code>4 Lightning Bolt (M21) 152</code></li>
+<li>Summary stats: total / owned / partial / missing</li>
+<li>Copy results to clipboard button</li></p><p><h3>Full REST API (v1)</h3>
+<li>API key management: Admin → API Keys — generate, revoke, delete keys</li>
+<li>All keys shown with last-used timestamp</li>
+<li>API key auth via <code>X-Api-Key</code> header or <code>?api_key=</code> query parameter</li>
+<li>Endpoints: <code>/api/v1/users</code>, <code>/api/v1/users/:id/collection</code>, <code>/api/v1/users/:id/decklist-check</code>, <code>/api/v1/users/:id/packs</code>, <code>/api/v1/users/:id/balance</code>, <code>/api/v1/sets</code>, <code>/api/v1/sets/:code/cards</code>, <code>/api/v1/economy</code></li>
+<li><strong>In-app API documentation</strong> at <code>/api-docs</code></li></p><p><h3>Language Support (EN/FR)</h3>
+<li>Full French and English interface support</li>
+<li>Language selector in the navigation sidebar — saved to user profile</li>
+<li>All nav labels, page titles, buttons, and key UI strings translated</li></p><p><h3>Update Guides (in-app)</h3>
+<li>Admin → Update Guides page with step-by-step:</li>
+  - Docker upgrade guide (safe, no data loss)
+  - GitHub update guide</p><p><h3>Other Improvements</h3>
+<li>Navigation sidebar reorganized with Player Zone, Admin Nexus, and Resources sections</li>
+<li>All new pages accessible from sidebar without page reload</li></p><p></div><div class="file-section"><div class="file-title">DOCKER_UPGRADE_GUIDE.md</div><h1>Docker Upgrade Guide — Zero Data Loss</h1></p><p>This guide explains how to safely upgrade your running MTG Pack Simulator instance to the latest version without losing any data.</p><p><h2>Overview</h2></p><p>The application uses <strong>Drizzle ORM with schema push</strong> — no migration files are needed. When you run <code>npm run db:push</code>, it:
+<li>Creates any new tables</li>
+<li>Adds any new columns with default values</li>
+<li><strong>Never deletes</strong> existing data</li>
+<li>Skips columns that already exist</li></p><p>This means upgrading the database schema is always safe to run on a live database.</p><p><hr style="border-color:#333"></p><p><h2>Step 1: Back Up Your Database (Strongly Recommended)</h2></p><p><strong>Option A — Use the in-app backup</strong> (Admin → Backup → Export All Data)
+Download the JSON file and keep it somewhere safe.</p><p><strong>Option B — PostgreSQL dump</strong>
+<pre><code># Find your postgres container name
+docker ps</p><p><h1>Dump the database</h1>
+docker exec &lt;postgres-container-name&gt; \
+  pg_dump -U &lt;db_user&gt; &lt;db_name&gt; &gt; backup_$(date +%Y%m%d_%H%M%S).sql</p><p><h1>Example:</h1>
+docker exec mtg-db pg_dump -U mtg mtgsim &gt; backup_20260321.sql
+</code></pre></p><p><hr style="border-color:#333"></p><p><h2>Step 2: Pull the New Image</h2></p><p><strong>If building from source (Replit / GitHub):</strong>
+<pre><code>git pull origin main
+docker build -t mtg-simulator:latest .
+</code></pre></p><p><strong>If using a container registry:</strong>
+<pre><code>docker pull yourregistry/mtg-simulator:latest
+</code></pre></p><p><hr style="border-color:#333"></p><p><h2>Step 3: Stop and Remove the Old Container</h2></p><p>The application data lives in PostgreSQL, not in the container, so removing it is safe.</p><p><pre><code># Check running containers
+docker ps</p><p><h1>Stop and remove old container</h1>
+docker stop mtg-simulator
+docker rm mtg-simulator
+</code></pre></p><p><hr style="border-color:#333"></p><p><h2>Step 4: Start the New Container</h2></p><p><pre><code>docker run -d \
+  --name mtg-simulator \
+  --env DATABASE_URL=postgresql://mtg:changeme@mtg-db:5432/mtgsim \
+  --env SESSION_SECRET=your-secret-here \
+  -p 5000:5000 \
+  --restart unless-stopped \
+  mtg-simulator:latest
+</code></pre></p><p>The schema migration happens automatically when the app starts (via <code>npm run db:push</code> in the startup sequence).</p><p>If you need to run it manually:
+<pre><code>docker exec mtg-simulator npm run db:push
+</code></pre></p><p><hr style="border-color:#333"></p><p><h2>Step 5: Verify</h2></p><p><pre><code># Check logs for successful startup
+docker logs mtg-simulator --tail 50</p><p><h1>Expected output:</h1>
+<h1>[express] serving on port 5000</h1>
+<h1>(no errors about missing tables or columns)</h1>
+</code></pre></p><p><hr style="border-color:#333"></p><p><h2>Docker Compose Workflow</h2></p><p>If you use Docker Compose:</p><p><pre><code>version: "3.8"
+services:
+  app:
+    image: mtg-simulator:latest   # or build: .
+    environment:
+      DATABASE_URL: postgresql://mtg:changeme@db:5432/mtgsim
+      SESSION_SECRET: change-me-to-a-random-string
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    restart: unless-stopped</p><p>  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: mtg
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: mtgsim
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped</p><p>volumes:
+  pgdata:
+</code></pre></p><p><strong>Upgrade command:</strong>
+<pre><code># Pull new image
+docker compose pull</p><p><h1>Restart with new image (data volume is preserved)</h1>
+docker compose up -d</p><p><h1>Run schema sync if needed</h1>
+docker compose exec app npm run db:push
+</code></pre></p><p><hr style="border-color:#333"></p><p><h2>What's New in v2.0 — New Database Tables</h2></p><p>The following tables are added automatically by <code>db:push</code>. They are new and empty by default — no existing data is affected:</p><p><tr><td> New Table | Purpose </td></tr>
+<tr><td>---|---</td></tr>
+<tr><td> <code>economy_settings</code> | Global economy configuration </td></tr>
+<tr><td> <code>user_balances</code> | Per-player currency balances </td></tr>
+<tr><td> <code>currency_transactions</code> | Full transaction history </td></tr>
+<tr><td> <code>market_pack_listings</code> | Admin-created pack store items </td></tr>
+<tr><td> <code>market_card_listings</code> | Player-to-player card listings </td></tr>
+<tr><td> <code>booster_schedules</code> | Daily auto-grant schedules </td></tr>
+<tr><td> <code>api_keys</code> | REST API authentication keys </td></tr></p><p>The following columns are added to existing tables:</p><p><tr><td> Table | New Column | Default </td></tr>
+<tr><td>---|---|---</td></tr>
+<tr><td> <code>users</code> | <code>preferred_language</code> | <code>'en'</code> </td></tr></p><p><hr style="border-color:#333"></p><p><h2>Restoring From Backup (If Needed)</h2></p><p>If something goes wrong, restore from your backup:</p><p><strong>From in-app JSON backup:</strong>
+1. Start the app on a clean database
+2. Go to Admin → Backup → Import All Data
+3. Upload your JSON file</p><p><strong>From SQL dump:</strong>
+<pre><code># Copy dump into postgres container
+docker cp backup_20260321.sql mtg-db:/tmp/</p><p><h1>Restore</h1>
+docker exec mtg-db psql -U mtg mtgsim &lt; /tmp/backup_20260321.sql
+</code></pre></p><p><hr style="border-color:#333"></p><p><h2>Important Notes</h2></p><p><li>Never change primary key column types in the schema — this generates destructive SQL</li>
+<li><code>db:push</code> is safe to run multiple times — it is idempotent</li>
+<li>If <code>db:push</code> prompts about column drops/renames interactively, choose to keep existing columns (select "No")</li>
+</div><div class="file-section"><div class="file-title">GITHUB_GUIDE.md</div><h1>GitHub Update Guide</h1></p><p>How to sync your MTG Pack Simulator to GitHub and keep it up to date.</p><p><hr style="border-color:#333"></p><p><h2>First Time: Connect to GitHub</h2></p><p><h3>From Replit</h3></p><p>1. Open your Replit project
+2. In the shell, initialize git and connect to your repo:</p><p><pre><code>git init
+git remote add origin https://github.com/yourusername/mtg-simulator.git
+git branch -M main
+</code></pre></p><p><h3>Recommended .gitignore</h3></p><p>Create a <code>.gitignore</code> file at the project root:</p><p><pre><code>node_modules/
+dist/
+.env
+.env.local
+*.log
+.replit
+replit.nix
+attached_assets/
+upgrade-archive/
+</code></pre></p><p><hr style="border-color:#333"></p><p><h2>Pushing Your Changes to GitHub</h2></p><p><h3>1. Check what has changed</h3></p><p><pre><code>git status
+git log --oneline -5
+</code></pre></p><p><h3>2. Stage your changes</h3></p><p><pre><code># Stage everything
+git add -A</p><p><h1>Or stage specific files/folders</h1>
+git add shared/ server/ client/src/ package.json
+</code></pre></p><p><h3>3. Commit</h3></p><p>Use clear, descriptive commit messages:</p><p><pre><code>git commit -m "feat: add economy, marketplace, decklist check, API keys"
+</code></pre></p><p><strong>Commit message prefixes:</strong>
+<li><code>feat:</code> — new feature</li>
+<li><code>fix:</code> — bug fix</li>
+<li><code>chore:</code> — dependencies, config, cleanup</li>
+<li><code>docs:</code> — documentation only</li>
+<li><code>db:</code> — database schema changes (<strong>always note these!</strong>)</li></p><p><h3>4. Push to GitHub</h3></p><p><pre><code>git push origin main
+</code></pre></p><p>If the remote has commits you don't have locally:
+<pre><code>git pull --rebase origin main
+git push origin main
+</code></pre></p><p><hr style="border-color:#333"></p><p><h2>Pulling Updates Into Your Replit</h2></p><p>If someone else (or another device) pushed changes to GitHub:</p><p><pre><code># Pull latest changes
+git pull origin main</p><p><h1>Install any newly added npm packages</h1>
+npm install</p><p><h1>Apply any new database columns/tables (safe, no data loss)</h1>
+npm run db:push
+</code></pre></p><p><hr style="border-color:#333"></p><p><h2>After a Database Schema Change</h2></p><p>Whenever a commit includes changes to <code>shared/schema.ts</code>, run on all environments:</p><p><pre><code>npm run db:push
+</code></pre></p><p>This is safe to run on a live database — it only adds, never removes data.</p><p><hr style="border-color:#333"></p><p><h2>Tagging a Release</h2></p><p>When you reach a stable version, tag it:</p><p><pre><code>git tag -a v2.0.0 -m "Economy, marketplace, API, decklist check, i18n"
+git push origin v2.0.0
+</code></pre></p><p>Then on GitHub, go to Releases → Create a release from the tag.</p><p><hr style="border-color:#333"></p><p><h2>Keeping Secrets Out of Git</h2></p><p>Never commit <code>.env</code> or any file containing:
+<li><code>DATABASE_URL</code></li>
+<li><code>SESSION_SECRET</code></li>
+<li>API keys</li></p><p>Use Replit's Secrets panel for development, and Docker environment variables for production.
+</div></body></html>
