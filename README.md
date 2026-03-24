@@ -2,6 +2,11 @@
 
 A self-hosted web application for simulating Magic: The Gathering booster pack openings. Sync any set from Scryfall, grant packs to players, watch animated card reveals with 3D flips and confetti effects, manage collections, run an in-game economy, and connect a Discord bot through the built-in REST API.
 
+//This is a vibe coded app using paid tool, so if you want to help me with the cost of it, please support me on Ko-Fi//
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/O5O71UV4QU)
+
+
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node](https://img.shields.io/badge/node-20%2B-green)
 ![PostgreSQL](https://img.shields.io/badge/database-PostgreSQL-blue)
