@@ -8,12 +8,12 @@ A self-hosted web application for simulating Magic: The Gathering booster pack o
 ![Docker](https://img.shields.io/badge/docker-compose-blue)
 
 > **Card data** is provided by [Scryfall](https://scryfall.com) via their free public API. Magic: The Gathering and all card names/artwork are property of [Wizards of the Coast](https://magic.wizards.com). This project is not affiliated with or endorsed by Wizards of the Coast.
-![[screenshot1.png]]
+
+![Screenshot](https://github.com/thertemis/Magic-Boosters-Manager/blob/main/screenshot1.png)
 ---
 
 ## Table of Contents
 
-- [Screenshots](#screenshots)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Requirements](#requirements)
@@ -25,17 +25,8 @@ A self-hosted web application for simulating Magic: The Gathering booster pack o
 - [Development](#development)
 
 ---
+![screenshot](https://github.com/thertemis/Magic-Boosters-Manager/blob/main/screenshot2.png)
 
-## Screenshots
-
-> Place your own screenshots in `docs/screenshots/` to complete this section.
-
-| Pack Opening | Collection | Admin Panel |
-|---|---|---|
-| *(3D card flip with confetti)* | *(filterable card grid with prices)* | *(set sync, grants, economy)* |
-
----
-![[screenshot2.png]]
 ## Features
 
 ### Pack Opening Experience
